@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<title>Genre Quiz</title>
+	<head>
+	<link rel="stylesheet" type="text/css" href="Final Project.css" />
+	</head>
+	<script type="text/javascript">
+		
+		//This function checks to see whether each question was answered
+		function validateQuestions()
+		{
+			//Declaration of the variables representing the user's answer to each question (5 questions -> 5 variables)
+			var vA1, vA2, vA3, vA4, vA5, vRetVal;
+			vA1 = document.bookQuiz.q1.value;
+			vA2 = document.bookQuiz.q2.value;
+			vA3 = document.bookQuiz.q3.value;
+			vA4 = document.bookQuiz.q4.value;
+			vA5 = document.bookQuiz.q5.value;		
+			
+			//If-statement checking to see whether each variable has a value, if all variables have values, a variable vRetVal is assigned a value of 1, 
+			//if not, the variable is assigned a value of 0
+			if (vA1 == "" || vA2 == "" || vA3 == "" || vA4 =="" || vA5 == "") {
+				vRetVal = 0;
+			} else {
+				vRetVal = 1;
+			}
+			//The return function returns the value given to vRetVal
+			return vRetVal;
+		}
+		
+		
+		
+		//This function changes the values of the variables to integers so they can be calculated after the quiz.
+		function calcRecommendation()
+		{
+			//Declares the variables again (non-universal) and determines the number of points that the user earns by identifying each 
+			//variable using the form tag and the name subtext in each radio button
+			var vA1, vA2, vA3, vA3, vA4, vA5;
+			var vTotal;
+			//Question 1
+			vA1 = parseInt(document.bookQuiz.q1.value);
+			//Question 2
+			vA2 = parseInt(document.bookQuiz.q2.value);
+			//Question 3
+			vA3 = parseInt(document.bookQuiz.q3.value);
+			//Question 4
+			vA4 = parseInt(document.bookQuiz.q4.value);
+			//Question 5
+			vA5 = parseInt(document.bookQuiz.q5.value);
+			
+			//Combines the variable values into one variable "vTotal" to calculate it later
+			vTotal = vA1 + vA2 + vA3 + vA4 + vA5;
+			
+			//This averages the total to show show the user's score
+			var vAverage = vTotal / 5;
+			
+			//If-statements deciding which genre the user should read
+			if (vAverage < 5 && vAverage > 0) {
+				alert("You should read a non-fiction book");
+			}
+			
+			else if (vAverage < 15 && vAverage > 5) {
+				alert("You should read a comedy story");
+			}
+			
+			else if (vAverage < 25 && vAverage > 15) {
+				alert("You should read a romance story");
+			}
+			
+			else if (vAverage < 35 && vAverage > 25) {
+				alert("You should read an action-adventure story");
+			}
+			
+			else if (vAverage < 45 && vAverage > 35) {
+				alert("You should read a horror story");
+			}
+			
+			else if (vAverage < 55 && vAverage > 45) {
+				alert("You should read a science fiction story");
+			}
+		}
+		
+		//This function calculates the user's score and returns a message stating the genre they should read, or, 
+		//if they did not answer all the questions, a message telling them to answer all the questions
+		function genreQuiz() {
+			var vResult;
+			
+			//Links this function to activate the calcRecommendation function in order to determine the answer to the quiz
+			if (validateQuestions() == 1) {
+				calcRecommendation();
+			} 
+			//If the user does not answer all the questions, this alert is displayed
+			else {
+				alert("Please provide answers to ALL questions.  Then try again.")
+			}
+		}
+	</script>
+	<body bgcolor="#CBD0B9">
+		<!--Navigation bar-->
+		<div class="navbar">
+			<a href="Homepage.html">Home</a>
+			<a href="Action-Adventure.html">Action/Adventure</a>
+			<a href="Comedy.html">Comedy</a>
+			<a href="Horror.html">Horror</a>
+			<a href="Non-Fiction.html">Non-Fiction</a>
+			<a href="Romance.html">Romance</a>
+			<a href="Sci-fi.html">Science Fiction</a>
+			<a href="Genre Quiz.html">Genre Quiz</a>
+			<a href="Checkout Page.html">Checkout</a>
+			</div> 
+		</div>
+		
+		<!--Title (Will change font and style later)-->
+		<center>
+			<h1>Genre Quiz</h1>
+		</center>
+		
+		<!--Make quiz about 8-10 questions long with 6 answers each!
+		-each button depending on the genre it portrays is 0, 10, 20, 30, 40, or 50 points
+		-add up the total number of points and divide it by the number of questions for the average
+		-use if statements to determine which genre the person should read (e.g. if the average is between 10 and 20 they should read comedy!)
+		Non-Fiction: 0 pts
+		Comedy: 10 pts
+		Romance: 20 pts 
+		Action-Adventure: 30 pts
+		Horror: 40 pts
+		Sci-fi: 50 pts
+		-->
+		
+		<!--The form tag groups this quiz so it can be easily registered instead of using over 30 if-statements to determine the points-->
+		<form name="bookQuiz">
+		<!--Question 1-->
+		<h4>What type of story do you enjoy?</h4>
+		<!--Action-Adventure:--> An exciting story<input type="radio" name="q1" value="30" id="a1"/><br />
+		<!--Comedy:--> A funny story<input type="radio" name="q1" value="10" id="c1"/><br />
+		<!--Horror:--> A suspenseful story<input type="radio" name="q1" value="40" id="h1"/><br />
+		<!--Romance:--> A passionate story<input type="radio" name="q1" value="20" id="r1"/><br />
+		<!--Non-Fiction:--> A true story<input type="radio" name="q1" value="0" id="n1"/><br />
+		<!--Sci-fi:--> A realistic story<input type="radio" name="q1" value="50" id="s1"/><br />
+		<br>
+		
+		<!--Question 2-->
+		<h4>What speed do you want a story to progress</h4>
+		<!--Action-Adventure:--> Very fast<input type="radio" name="q2" value="30" id="a2"/><br />
+		<!--Comedy:--> Easygoing<input type="radio" name="q2" value="10" id="c2"/><br />
+		<!--Horror:--> Incredibly slow<input type="radio" name="q2" value="40" id="h2"/><br />
+		<!--Romance:--> Slowly<input type="radio" name="q2" value="20" id="r2"/><br />
+		<!--Non-Fiction:--> Any speed<input type="radio" name="q2" value="0" id="n2"/><br />
+		<!--Sci-fi:--> Changing speeds<input type="radio" name="q2" value="50" id="s2"/><br />
+		<br>
+		
+		<!--Question 3-->
+		<h4>Select a colour scheme</h4> <!--Insert colour scheme beside each answer!!!!-->
+		<!--Action-Adventure:--> Warm desaturated colours<input type="radio" name="q3" value="30" id="a3"/> <img src="https://netdna.webdesignerdepot.com/uploads/color/palette-step-4.gif" alt="colours" width="100" height="100"><br /> 
+		<!--Comedy:--> Bright Yellow/Blue<input type="radio" name="q3" value="10" id="c3"/><img src="http://www.sothebys.com/content/dam/sothebys-pages/video-pages/2015/05/rothko_videoimage_thumbnail.jpg" alt="colours" width="100" height="100"><br /> 
+		<!--Horror:--> Red/Black<input type="radio" name="q3" value="40" id="h3"/><img src="http://www.powerpointhintergrund.com/download/lids-black-and-red-wallpaper-hd-12126" alt="colours" width="100" height="100"><br />
+		<!--Romance:--> Red, deep pinks, purples<input type="radio" name="q3" value="20" id="r3"/><img src="https://orig00.deviantart.net/d950/f/2013/274/c/c/red__pink__and_purple_bokeh_texture_by_meggera007-d6ov2g2.jpg" alt="colours" width="100" height="100"><br />
+		<!--Non-Fiction:--> Grey<input type="radio" name="q3" value="0" id="n3"/><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Color_icon_gray_v2.svg/1200px-Color_icon_gray_v2.svg.png" alt="colours" width="100" height="100"><br />
+		<!--Sci-fi:--> Electric blue/Black<input type="radio" name="q3" value="50" id="s3"/><img src="https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/electric-blue-over-black_-y4zbbwbb__F0000.png" alt="colours" width="100" height="100"><br />
+		<br>
+		
+		<!--Question 4-->
+		<h4>What feelings do you want the story to elicit to you?</h4>
+		<!--Action-Adventure:--> Racing feelings<input type="radio" name="q4" value="30" id="a4"/><br />
+		<!--Comedy:--> Laughter, hilarity<input type="radio" name="q4" value="10" id="c4"/><br />
+		<!--Horror:--> A strong beating heart, uncertainty<input type="radio" name="q4" value="40" id="h4"/><br />
+		<!--Romance:--> Love<input type="radio" name="q4" value="20" id="r4"/><br />
+		<!--Non-Fiction:--> Very little feeling, across a broad spectrum <input type="radio" name="q4" value="0" id="n4"/><br />
+		<!--Sci-fi:--> A broad spectrum of all feelings strongly<input type="radio" name="q4" value="50" id="s4"/><br />
+		<br>
+		
+		<!--Question 5-->
+		<h4>How do you percieve stories?</h4>
+		<!--Action-Adventure:--> Something that allows society to experience the unlikely<input type="radio" name="q5" value="30" id="a5"/><br />
+		<!--Comedy:--> A way to entertain<input type="radio" name="q5" value="40" id="c5"/><br />
+		<!--Horror:--> They keep us awake at night<input type="radio" name="q5" value="10" id="h5"/><br />
+		<!--Romance:--> As a means of escape<input type="radio" name="q5" value="20" id="r5"/><br />
+		<!--Non-Fiction:--> Insufficient to society<input type="radio" name="q5" value="0" id="n5"/><br />
+		<!--Sci-fi:--> Something that allows society to experience the impossible<input type="radio" name="q5" value="50" id="s5"/><br />
+		<br>
+		
+		
+		<br>
+		<button onclick="genreQuiz()" style='background-color:gray'>Determine Genre!</button>
+		</form>
+	</body>
+</html>

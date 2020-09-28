@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+    <!--Displays the name of the webpage on the tab-->
+   <title>Checkout</title>
+   <head>
+    <!--Links the webpage to the stylesheet-->
+   <link rel="stylesheet" type="text/css" href="Final Project.css" />
+   </head>
+   <script type="text/javascript">
+       //Checkout
+       /*(
+       Takes you to a receipt with a link back to the homepage!
+       When you enter the page from selecting a book, the book will instantly be in your 'cart' and you can purchase it
+      
+       ask for debit card number and the adress of the customer
+       -Find a way to get the date and time to see if a debit card is expired
+       -asks user if they want to donate to help provide education to impoverished people around the world! (enter donation amount themselves)
+       -"Do you have a promo card??" -> For cheaper books: One promo could be the word "please"
+      
+       -name
+       -email
+       -debit/credit number
+       -expiration date of card
+       -shipping adress (country, city, postal code, street name, street number)
+       */
+       //Global variables
+       var aBooks;
+        var iNumBooks = 60;
+        var fAverageBookPrice;
+        var fCheapestBookPrice, sCheapestBookTitle;
+        var fDearestBookPrice, sDearestBookTitle;
+        var iBookID, sBookTitle, fBookPrice, sBookPrice;
+        //Code sourced from: https://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript/966938#966938
+        //A function allowing a 2-dimensional array to be created in order to organize the book names and prices
+       function createArray(length) {
+           var arr = new Array(length || 0),
+           i = length;
+           if (arguments.length > 1) {
+               var args = Array.prototype.slice.call(arguments, 1);
+               while(i--) arr[length-1 - i] = createArray.apply(this, args);
+           }
+            //Reuturns the array
+           return arr;
+       }
+        
+       function LoadBookDB()
+       {
+            var iNumCols;
+            iNumCols = 2;
+            //variable calling the createArray function, allowing a 2-dimensional array to be created
+            aBooks = createArray(iNumBooks,iNumCols);
+            
+            //Array containing a registry of every book throughout the pages and its corresponding price
+           //Action-Adventure books (No. 0-9)
+           aBooks[0][0] = 'Adventures of Tintin';
+           aBooks[0][1] = 160.00;
+           aBooks[1][0] = 'Divergent';
+           aBooks[1][1] = 20.00;
+           aBooks[2][0] = 'Harry Potter Book 1';
+           aBooks[2][1] = 13.99;
+           aBooks[3][0] = 'Hunger Games';
+           aBooks[3][1] = 10.99;
+           aBooks[4][0] = 'Indiana Jones';
+           aBooks[4][1] = 20.00;
+           aBooks[5][0] = 'Jurrassic Park';
+           aBooks[5][1] = 10.99;
+           aBooks[6][0] = 'Lord of the Rings';
+           aBooks[6][1] = 19.99;
+           aBooks[7][0] = 'Percy Jackson';
+           aBooks[7][1] = 17.99;
+           aBooks[8][0] = 'Scott Pilgrim Bersus the World';
+           aBooks[8][1] = 4.99;
+           aBooks[9][0] = 'The Maze Runner';
+           aBooks[9][1] = 19.99;
+           //Comedy (N0. 10-19)
+           aBooks[10][0] = 'Archie Comics';
+           aBooks[10][1] = 14.50;
+           aBooks[11][0] = 'Canada';
+           aBooks[11][1] = 30.00;
+           aBooks[12][0] = 'Cats Cradle';
+           aBooks[12][1] = 23.00;
+           aBooks[13][0] = 'Hitchhiker\'s Guide to the Galaxy';
+           aBooks[13][1] = 23.50;
+           aBooks[14][0] = 'I Funny (James Patterson)';
+           aBooks[14][1] = 10.50;
+           aBooks[15][0] = 'Life, the Universe, and Everything';
+           aBooks[15][1] = 15.00;
+           aBooks[16][0] = 'Midsummers Night Dream';
+           aBooks[16][1] = 7.00;
+           aBooks[17][0] = 'Ten (Lauren Myracle)';
+           aBooks[17][1] = 20.00;
+           aBooks[18][0] = 'The Twits (Roald Dahl)';
+           aBooks[18][1] = 9.50;
+           aBooks[19][0] = 'We Learn Nothing';
+           aBooks[19][1] = 18.50;
+           //Horror (No. 20-29)
+           aBooks[20][0] = 'American Physco';
+           aBooks[20][1] = 19.50;
+           aBooks[21][0] = 'Coraline';
+           aBooks[21][1] = 15.50;
+           aBooks[22][0] = 'Dracula (Bram Stoker)';
+           aBooks[22][1] = 9.00;
+           aBooks[23][0] = 'Frankenstein (Mary Shelly)';
+           aBooks[23][1] = 9.00;
+           aBooks[24][0] = 'It';
+           aBooks[24][1] = 21.50;
+           aBooks[25][0] = 'Jaws';
+           aBooks[25][1] = 25.00;
+           aBooks[26][0] = 'Silence of the Lambs';
+           aBooks[26][1] = 5.00;
+           aBooks[27][0] = 'The Phantom of the Opera';
+           aBooks[27][1] = 12.50;
+           aBooks[28][0] = 'The Picture of Dorian Grey (Oscar Wilde)';
+           aBooks[28][1] = 14.00;
+           aBooks[29][0] = 'The Shining';
+           aBooks[29][1] = 10.80;
+           //Non-fiction (No. 30-39)
+           aBooks[30][0] = 'A Brief History of Time';
+           aBooks[30][1] = 18.00;
+           aBooks[31][0] = 'A Short History of Diseases';
+           aBooks[31][1] = 20.00;
+           aBooks[32][0] = 'Astrophysics for People in a Hurry';
+           aBooks[32][1] =  18.70;
+           aBooks[33][0] = 'Cosmos (Carl Sagan)';
+           aBooks[33][1] = 20.00;
+           aBooks[34][0] = 'Dark Matter and the Dinosaurs';
+           aBooks[34][1] = 30.40;
+           aBooks[35][0] = 'Sapiens: A Brief History of Humankind';
+           aBooks[35][1] = 15.60;
+           aBooks[36][0] = 'Startalk';
+           aBooks[36][1] = 34.74;
+           aBooks[37][0] = 'The Hot Zone';
+           aBooks[37][1] = 11.87;
+           aBooks[38][0] = 'The Immortal Life of Henrietta Lacks';
+           aBooks[38][1] = 16.85;
+           aBooks[39][0] = 'The Violinist\'s Thumb: And Other Lost Tales of Love, War, and Genius, as Written by Our Genetic Code';
+           aBooks[39][1] = 22.00;
+           //Romance (No. 40-49)
+           aBooks[40][0] = 'Feed';
+           aBooks[40][1] = 11.87;
+           aBooks[41][0] = 'Fifty Shades of Grey';
+           aBooks[41][1] = 28.92;
+           aBooks[42][0] = 'Gone with the Wind';
+           aBooks[42][1] = 12.86;
+           aBooks[43][0] = 'Pride and Prejudice';
+           aBooks[43][1] = 6.75;
+           aBooks[44][0] = 'Sense and Sensibility';
+           aBooks[44][1] = 9.04;
+           aBooks[45][0] = 'The Last Unicorn';
+           aBooks[45][1] = 20.50;
+           aBooks[46][0] = 'The Notebook';
+           aBooks[46][1] = 19.80;
+           aBooks[47][0] = 'Twilight';
+           aBooks[47][1] = 18.25;
+           aBooks[48][0] = 'The Time Traveller\'s Wife';
+           aBooks[48][1] = 914.50;
+           aBooks[49][0] = 'Wuthering Heights';
+           aBooks[49][1] = 8.00;
+           //Science-fiction (No. 50-59)
+           aBooks[50][0] = 'Animal Farm';
+           aBooks[50][1] = 10.80;
+           aBooks[51][0] = 'Armada';
+           aBooks[51][1] = 19.80;
+           aBooks[52][0] = 'Blade Runner';
+           aBooks[52][1] = 9.99;
+           aBooks[53][0] = 'Ender`s Game';
+           aBooks[53][1] = 8.99;
+           aBooks[54][0] = 'Feed';
+           aBooks[54][1] = 11.87;
+           aBooks[55][0] = 'Frankenstein';
+           aBooks[55][1] = 7.99;
+           aBooks[56][0] = 'Ready Player One';
+           aBooks[56][1] = 13.00;
+           aBooks[57][0] = 'The 5th Sacred Thing';
+           aBooks[57][1] = 23.76;
+           aBooks[58][0] = 'We';
+           aBooks[58][1] = 9.80;
+           aBooks[59][0] = '1984';
+           aBooks[59][1] = 10.79;
+       }
+        //This function calculates the highest costing book, and the lowest costing book using a forloop
+        function CalculateBookStatistics()
+        {
+            //Declaration of variables
+            var fTotalBookPrice, iCurBook;
+            fTotalBookPrice = 0;
+            //we are taking a 'beat the champ' approach with the first champ being the first book
+            //Initialization of the variables
+            sCheapestBookTitle = aBooks[0][0];
+            fCheapestBookPrice = aBooks[0][1];
+            sDearestBookTitle = aBooks[0][0];
+            fDearestBookPrice = aBooks[0][1];
+            for (iCurBook = 0; iCurBook < iNumBooks; iCurBook++) {
+                
+                fTotalBookPrice = fTotalBookPrice + aBooks[iCurBook][1];
+                if (aBooks[iCurBook][1] < fCheapestBookPrice) {
+                    sCheapestBookTitle = aBooks[iCurBook][0];
+                    fCheapestBookPrice = aBooks[iCurBook][1];
+                }
+                if (aBooks[iCurBook][1] > fDearestBookPrice) {
+                    sDearestBookTitle = aBooks[iCurBook][0];
+                    fDearestBookPrice = aBooks[iCurBook][1];
+                }
+            }
+            fAverageBookPrice = Math.round(fTotalBookPrice / iNumBooks * 100) / 100;
+            fAverageBookPrice = "$".concat(fAverageBookPrice);
+
+            var cBookandPrice = (sCheapestBookTitle + " for $" + fCheapestBookPrice);
+            var dBookandPrice = (sDearestBookTitle + " for $" + fDearestBookPrice);
+
+            //sBookPrice.concat(fBookPrice);
+            document.getElementById("averageprice").innerHTML = fAverageBookPrice;
+            document.getElementById("cheapestbookandprice").innerHTML = cBookandPrice;
+            document.getElementById("dearestbookandprice").innerHTML = dBookandPrice;
+        }
+        
+       //found at: https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript
+       function findGetParameter(parameterName) {
+           var result = null,
+               tmp = [];
+           location.search
+               .substr(1)
+               .split("&")
+               .forEach(function (item) {
+                   tmp = item.split("=");
+                   if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+               });
+           return result;
+       }
+       function onLoad()
+       {
+            //Creates variables representing the different elements of the book
+          
+            //Retrieves the array values to find the book from the variables
+            LoadBookDB();
+            
+            CalculateBookStatistics();
+
+            //Id of the book 1,2,3...
+           iBookID = findGetParameter('bookid');
+
+            //Book title "xyz" as a string
+           sBookTitle = aBooks[iBookID][0];
+
+            //Book price $ as a float value
+           fBookPrice = aBooks[iBookID][1];
+
+            //The string section of the book price, a dollar sign
+           sBookPrice = '$';
+
+            //Combines (concatenates) the string book price with the float book price
+           sBookPrice = sBookPrice.concat(fBookPrice);
+
+           //Places the title and price of the book chosen into the document via id
+           document.getElementById('booktitle').innerHTML = sBookTitle;
+           document.getElementById('bookprice').innerHTML = sBookPrice;
+       }
+        function receipt() {
+            /*
+            -combines 14% tax: will display tax on the receipt*/
+            
+            var lName = document.getElementById("lName").value;
+            var fName = document.getElementById("fName").value;
+            var email = document.getElementById("sEmail").value;
+            var cardNum = document.getElementById("cardNum").value;
+            var cardExp = document.getElementById("cardExp").value;
+            var country = document.getElementById("country").value;
+            var province = document.getElementById("sectional").value;
+            var street = document.getElementById("street").value;
+            var houseNum = document.getElementById("houseNum").value;
+            var postCode = document.getElementById("postalCode").value;
+            
+            postCode = postCode.toUpperCase();
+            lName = lName.toUpperCase();
+            fName = fName.toUpperCase();
+            //iBookID, sBookTitle, fBookPrice, sBookPrice;
+            var iExTimestamp = Date.parse(cardExp);
+            var tax = fBookPrice * 0.14;
+            var total = fBookPrice + tax;
+            
+            if (cardNum.length != 16) {
+                alert("Please enter a 16-digit card number.");
+            }
+            else if (!(iExTimestamp > 0)) {
+                alert("Please enter a valid expiry date.");
+            }
+            
+            else if (postCode.length != 6) {
+                alert("Please enter a valid postal code");
+            }
+            else {
+				document.write("<center><h2>Receipt</h2>");
+                document.write("<b>Purchase:</b> " + sBookTitle + " for " + total + "<br />")
+                document.write(fName + " " + lName + "<br />");
+                document.write("<b>Email:</b> " + email + "<br />");
+                document.write("<b>Shipping address:</b> " + houseNum + ", " + street + ", " + province + ", " + country + "<br />");
+                document.write("<b>Postal Code:</b> " + postCode + "<br />");
+                document.write("<a href=\'Homepage.html\'>Link</a> to the homepage!</center>")
+            }
+        }
+   </script>
+   <body onload="onLoad()" bgcolor="#CBD0B9">
+       <div class="navbar">
+           <a href="Homepage.html">Home</a>
+           <a href="Action-Adventure.html">Action/Adventure</a>
+           <a href="Comedy.html">Comedy</a>
+            <a href="Horror.html">Horror</a>
+            <a href="Non-Fiction.html">Non-Fiction</a>
+           <a href="Romance.html">Romance</a>
+           <a href="Sci-fi.html">Science Fiction</a>
+           <a href="Genre Quiz.html">Genre Quiz</a>
+           </div>
+       </div>
+      
+       <!--Title (Will change font and style later)-->
+       <center>
+           <h1>Checkout</h1>
+       </center>
+       Book Chosen:
+       <label id="booktitle"></label><br/>
+       Book Price:
+       <label id="bookprice"></label>
+        <br/><br/>
+        Average Book Price: <label id="averageprice"></label><br/>
+        Cheapest Book and Price: <label id="cheapestbookandprice"></label><br/>
+        Dearest Book and Price: <label id="dearestbookandprice"></label><br/>
+       <br />
+       <br />
+       <p>Please fill out the required information to order your novel</p><br />
+       Last Name: <input type="text" id="lName" value=""><br />
+       First Name: <input type="text" id="fName" value=""><br />
+       Your Email: <input type="text" id="sEmail" value=""><br />
+       Debit/Credit Card Number: <input type="text" id="cardNum" value=""><br />
+       Expiry Date of Card (yyyy-mm-dd): <input type="text" id="cardExp" value=""><br />
+       <br />
+       <p>Shipping Address</p>
+       Country: <input type="text" id="country" value=""><br />
+       State/Province: <input type="text" id="sectional" value=""><br />
+       Street: <input type="text" id="street" value=""><br />
+       House Number: <input type="text" id="houseNum" value=""><br />
+        Postal Code (No spaces): <input type="text" id="postalCode" value=""><br />
+        
+        <button onclick="receipt()" style='background-color:gray'>Purchase Book!</button>
+      
+       <p>Can't purchase books? Go to the local library!</p>
+       <a href="http://www.torontopubliclibrary.ca">Library</a>
+       <br/>
+   </body>
+</html>
